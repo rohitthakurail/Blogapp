@@ -1,0 +1,83 @@
+{% extends 'blog/base.html' %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{post.title|safe}}</title>
+</head>
+{% block content %}
+<body>
+<div class="content container" style="border-style:solid;border-color:black">
+
+    {% if user.is_staff %}
+    <span> <a class="btn btn-warning" href="{% url 'blog:post_update' pk=post.pk %}">Edit Post</a></span>
+    <span> <a class="btn btn-danger" href="{% url 'blog:post_delete' pk=post.pk %}">Delete Post</a></span>
+    {% else %}
+{% ifequal post.author.id user.id %}
+         <span> <a class="btn btn-warning" href="{% url 'blog:post_update' pk=post.pk %}">Edit Post</a></span>
+    <span> <a class="btn btn-danger" href="{% url 'blog:post_delete' pk=post.pk %}">Delete Post</a></span>
+    {% endifequal %}
+{% endif %}
+
+    <div class="image_wrapper"> <img src="{{ post.post_banner.url }}"> </div>
+    <h1> {{ post.title|safe }}</h1>
+    <div class="date postdate">Posted On: {{post.date_created}}</div>
+    {% if user.is_authenticated %}
+    <div class="date postdate">Posted By: <a href="{% url 'blog:user_details' pk=post.author.pk %}"> {{ post.author.username }}</a></div>
+    {% else %}
+            <div class="date postdate">Posted By:{{ post.author.username }}</div>
+    {% endif %}
+    <div style="border-style:ridge">{{ post.text|safe }}</div>
+<strong>Comments({{ post.post_comments.all.count }}): </strong>
+</div>
+
+    {% for comment in post.post_comments.all %}
+    <div class="content container" style="border-style:solid; border-color:black;" >
+    <div style="border-style:groove; border-color:red;"><em>{{comment.text|safe}}</em></div>
+    <div class="date postdate" >Comment By: {{comment.author}}</div>
+    <div class="date postdate" >Comments On: {{comment.date_created}} </div>
+    {% if user.is_staff %}
+        <a class="btn btn-danger" href="{% url 'blog:comment_delete' pk=comment.pk %}">Delete Comment</a>
+    {% else %}
+    {% ifequal comment.author.id user.id %}
+
+        <a class="btn btn-warning" href="{% url 'blog:comment_update' pk=comment.pk %}">Edit Your Comment</a>
+        <a class="btn btn-danger" href="{% url 'blog:comment_delete' pk=comment.pk %}">Delete Comment</a>
+    {% endifequal %}
+        {% endif %}
+</div>
+    {%endfor%}
+
+
+    <div class="content container" >
+    {% if user.is_authenticated %}
+    <button class="btn btn-primary" type="submit" id="addcomment" >Add Comment</button>
+    <form id="commentform" style="opacity:0" method="post">
+
+        {{comment_form.as_p}}
+        {% csrf_token %}
+
+        <button class="btn btn-primary" type="submit">Post Comment</button>
+    {% else %}
+        <a class="btn btn-success" href="{% url 'login' %}?next={{request.path}}"><button>Login to Add Comment</button></a>
+    </form>
+    {% endif %}
+
+</div>
+{% block body %}
+{% endblock %}
+</body>
+<script>
+  $("#addcomment").click(function(){
+    $("#commentform").css("opacity",'1');
+    $("#addcomment").hide()
+  });
+</script>
+<script>
+  $("#editbtn").click(function(){
+    $("#editcomform").css("opacity",'1');
+    $("#editbtn").hide()
+  });
+</script>
+{% endblock %}
+</html>

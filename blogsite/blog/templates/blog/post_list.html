@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    {% for post in post_list%}
+<!--        {% if user  not in post.author.blocked.all %}-->
+
+
+    <div class="container"  style="border-style:groove">
+        <h3>{{ forloop.counter }})<a href="{% url 'blog:post_detail' pk=post.pk %}">{{ post.title|safe }}</a></h3>
+        <div >
+            <div>
+            <p class="text-justify"><strong>Published By: </strong><a href="{% url 'blog:user_details' post.author.id %}">{{ post.author }}</a></p>
+            <p class="text-justify"><strong>Published on:</strong> {{ post.date_created|date:"d-m-Y" }}</p>
+
+                </div>
+            </div>
+        <a href="{% url 'blog:post_detail' pk=post.pk %}">Comments: {{ post.post_comments.count }}</a>
+
+    </div>
+<!--{% endif %}-->
+    {% endfor %}
+</div>
+
+
+
+
+{% endblock %}

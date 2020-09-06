@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+    <ul class="navbar-nav">
+
+        {% if user.is_authenticated %}
+        <li class="nav-item active" ><p>Welcome: '{{ user.username }}'</p></li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'blog:user_list' %}">All Users</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/">All Blogs</a>
+        </li>
+        <li class="nav-item active">
+                <a class="nav-link" href="{% url 'blog:post_create' %}">Create Post</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{%url 'logout' %}?next=/">Logout</a>
+            </li>
+        {% else %}
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'blog:user_list' %}">All Users</a>
+        </li>
+         <li class="nav-item active">
+            <a class="nav-link" href="/">All Blogs</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'blog:signup' %}">Sign Up</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+
+    </ul>
+    {% endif %}
+</div>
+</nav>
+
+{% block content %}
+{% endblock %}
+</body>
+</html>

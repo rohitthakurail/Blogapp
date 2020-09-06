@@ -1,0 +1,33 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="container" >
+    <div class="jumbotron">
+    <h1>Username: {{ customuser.username }}</h1>
+    <h1>Email: {{ customuser.email }} </h1>
+        {% ifequal customuser user %}
+        {%else%}
+        {% if customuser in user.blocked.all %}
+        <p style="color:red"> {{ customuser.username }} is in your Block List</p>
+        <form method="post" action="{% url 'blog:unblock_user' pk=customuser.pk %}">
+        {% csrf_token %}
+            <input class="btn btn-warning" type="submit" value="Unblock User">
+        </form>
+        {% else %}
+        <form method="post" action="{% url 'blog:block_user' pk=customuser.pk %}">
+        {% csrf_token %}
+            <input  class="btn btn-danger" type="submit" value="Block This User">
+        </form>
+        {% endif %}
+        {% endifequal %}
+
+        <div class="form-group">
+            Posts By {{customuser.username}}:
+            {% for post in customuser.posts.all %}
+            <h3>{{forloop.counter}}){{ post.title|safe }}</h3>
+            <p class="text-justify"><strong>Published on:</strong> {{ post.date_created|date:"d-m-Y" }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

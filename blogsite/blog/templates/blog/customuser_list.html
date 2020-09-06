@@ -1,0 +1,36 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    {% for person in user_list%}
+
+    <div class="container"  style="border-style:groove">
+        <h3>{{ forloop.counter }})<a href="{% url 'blog:user_details' pk=person.id %}">{{ person.username }}</a></h3>
+        <div >
+            <div>
+            <p class="text-justify"><strong>Email:</strong> {{ person.email }}</p>
+
+                </div>
+            </div>
+    </div>
+    {% endfor %}
+
+
+</div>
+{% if user.is_authenticated  and user.blocked.all %}
+<div class="jumbotron jumbotron-fluid">
+    <h1>Users BLocked By You</h1>
+    {% for person in user.blocked.all %}
+
+    <div class="container"  style="border-style:groove">
+        <h3>{{ forloop.counter }})<a href="{% url 'blog:user_details' pk=person.id %}">{{ person.username }}</a></h3>
+        <div >
+            <div>
+            <p class="text-justify"><strong>Email:</strong> {{ person.email }}</p>
+
+                </div>
+            </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

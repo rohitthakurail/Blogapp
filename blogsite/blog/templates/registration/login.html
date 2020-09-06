@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login at Blog Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+ <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+    <h2>Please Login: </h2>
+    {% if form.errors %}
+        <p>Invalid Credentials. Please try again!</p>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+
+        <div class="form-group">
+
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" class='btn btn-primary' value="Login" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </div>
+    </form>
+  </div>
+ </div>
+</body>
+</html>
