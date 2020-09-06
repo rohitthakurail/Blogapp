@@ -35,7 +35,7 @@ class UserListView(ListView):
         if current_user.is_authenticated:
             blocked_users = current_user.blocked.all().values_list('id')
             blocked_by = [user.id for user in CustomUser.objects.all() if current_user in user.blocked.all()]
-            return CustomUser.objects.filter(~Q(id__in=blocked_users)).filter(~Q(id__in=blocked_by)).exclude(is_staff=True)
+            return CustomUser.objects.filter(~Q(id__in=blocked_users)).filter(~Q(id__in=blocked_by)).exclude(is_staff=True).exclude(id__exact=current_user.id)
         else:
             return CustomUser.objects.all()
 class PostListView(ListView):
