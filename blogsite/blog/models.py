@@ -7,6 +7,7 @@ from PIL import Image
 
 class CustomUser(AbstractUser):
     blocked = models.ManyToManyField('CustomUser',related_name='blocked_users',blank=True)
+    liked_posts = models.ManyToManyField('Post',related_name='liked_posts',blank=True)
 
     def __str__(self):
         return self.username
@@ -17,6 +18,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250)
     text = models.TextField()
     date_created = models.DateTimeField(default=timezone.now)
+    liked_by = models.ManyToManyField('CustomUser',related_name='liked_by',blank=True)
     class Meta:
         ordering = ['-date_created']
 

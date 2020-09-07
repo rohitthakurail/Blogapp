@@ -24,11 +24,25 @@
     <div class="date postdate">Posted On: {{post.date_created}}</div>
     {% if user.is_authenticated %}
     <div class="date postdate">Posted By: <a href="{% url 'blog:user_details' pk=post.author.pk %}"> {{ post.author.username }}</a></div>
+    {% if post in user.liked_posts.all %}
+    <a href="{%url 'blog:remove_like' pk=post.pk%}" class="btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-thumbs-up"></span> Liked
+        </a>
+    {% else %}
+    <a href="{%url 'blog:like' pk=post.pk%}" class="btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-thumbs-up"></span> Like
+        </a>
+    {% endif %}
     {% else %}
             <div class="date postdate">Posted By:{{ post.author.username }}</div>
     {% endif %}
     <div style="border-style:ridge">{{ post.text|safe }}</div>
-<strong>Comments({{ post.post_comments.all.count }}): </strong>
+    {% if post.liked_by.count <= 1 %}
+    <p>{{post.liked_by.count}} Like</p>
+    {% else %}
+    <p>{{post.liked_by.count}} Likes</p>
+    {% endif %}
+    <strong>Comments({{ post.post_comments.all.count }}): </strong>
 </div>
 
     {% for comment in post.post_comments.all %}
@@ -43,6 +57,7 @@
 
         <a class="btn btn-warning" href="{% url 'blog:comment_update' pk=comment.pk %}">Edit Your Comment</a>
         <a class="btn btn-danger" href="{% url 'blog:comment_delete' pk=comment.pk %}">Delete Comment</a>
+
     {% endifequal %}
         {% endif %}
 </div>
@@ -60,6 +75,7 @@
         <button class="btn btn-primary" type="submit">Post Comment</button>
     {% else %}
         <a class="btn btn-success" href="{% url 'login' %}?next={{request.path}}"><button>Login to Add Comment</button></a>
+        <a class="likebutton btn btn-primary btn-lg" href="{% url 'login' %}?next={{request.path}}"><button>Login to Like Post</button></a>
     </form>
     {% endif %}
 

@@ -16,7 +16,8 @@ urlpatterns = [
     path('user/<pk>/',views.UserDetailView.as_view(),name='user_details'),
     path('block/<pk>',views.BlockUser,name='block_user'),
     path('unblock/<pk>',views.UnblockUser,name='unblock_user'),
-
+    path('post/<pk>/like/',views.like ,name='like'),
+    path('post/<pk>/removelike/',views.RemoveLike ,name='remove_like'),
 
 
 ]

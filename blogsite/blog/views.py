@@ -141,3 +141,21 @@ def UnblockUser(request,pk):
         user.blocked.remove(user_id)
     return HttpResponseRedirect(reverse('blog:user_details',kwargs={'pk':user_id}))
 
+def like(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    post_id = post.pk
+    if request.method == 'GET':
+        user = CustomUser.objects.get(username=request.user)
+        user_id = user.pk
+        user.liked_posts.add(post_id)
+        post.liked_by.add(user_id)
+    return HttpResponseRedirect(reverse("blog:post_detail",kwargs={'pk':post_id}))
+def RemoveLike(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    post_id = post.pk
+    if request.method == 'GET':
+        user = CustomUser.objects.get(username=request.user)
+        user_id = user.pk
+        user.liked_posts.remove(post_id)
+        post.liked_by.remove(user_id)
+    return HttpResponseRedirect(reverse("blog:post_detail",kwargs={'pk':post_id}))
